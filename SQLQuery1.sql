@@ -85,3 +85,7 @@
 --select * from floor_spots;
 --select * from floors;
 
+UPDATE floor_spots SET carspot = CAST(0 AS BIT), motorspot = 1, floorID = (select f.floor_ID from floors f where f.floor_Name = 'A');
+
+--insert into floor_spots ( carspot ) values(1);
+select * from floor_spots;

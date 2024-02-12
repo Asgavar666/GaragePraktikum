@@ -58,7 +58,7 @@ namespace Garage
                     int numberPlacesLarge = int.Parse(TbPlacesLargeNr.Text);
                     int numberPlacesSmall = int.Parse(TbPlacesSmallNr.Text);
                     DB.InsertData(Floor, numberPlacesLarge, numberPlacesSmall);
-                    DB.makeSpots();
+                   // DB.makeSpots();
 
                 }
                 catch (Exception Ex)
