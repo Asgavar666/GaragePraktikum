@@ -73,47 +73,47 @@ namespace Garage
             return parkingSpot;
         }
 
-        //public int GetLargeSpotsCount(string etage)
-        //{
-        //    string Query = "select Park_groß from Tb_etagen where Etage = '@etage';";
-
-        //    using (SqlConnection connection = new SqlConnection(ConStr))
-        //    {
-        //        connection.Open();
-        //        using (SqlCommand cmd = new SqlCommand(Query, connection))
-        //        {
-        //            cmd.Parameters.AddWithValue("@etage", etage);
-
-
-        //            int numberLargeSpots =  cmd.ExecuteNonQuery(); 
-
-        //            return numberLargeSpots;
-        //        }
-
-        //    }
-
-        //}
-
-        //public int GetSmallSpotsCount(string etage)
-        //{
-        //    string Query = "select Park_klein from Tb_etagen where Etage = '@etage';";
-
-        //    using (SqlConnection connection = new SqlConnection(ConStr))
-        //    {
-        //        connection.Open();
-        //        using (SqlCommand cmd = new SqlCommand(Query, connection))
-        //        {
-        //            cmd.Parameters.AddWithValue("@etage", etage);
+        public int GetLargeSpotsCount(string floor)
+        {
+            string Query = "select car_Spots from floors where floor_Name = @floor;";
+            int numberLargeSpots = 0;
+            using (SqlConnection connection = new SqlConnection(ConStr))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand(Query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@floor", floor);
 
 
-        //            int numberSmallSpots = cmd.ExecuteNonQuery();
+                     object result = cmd.ExecuteScalar();
 
-        //            return numberSmallSpots;
-        //        }
+                    numberLargeSpots = Convert.ToInt32(result);
+                }
 
-        //    }
+            }
+            return numberLargeSpots;
+        }
 
-        //}
+        public int GetSmallSpotsCount(string floor)
+        {
+            string Query = "select motorbike_Spots from floors where floor_Name = @floor;";
+            int numberSmallSpots = 0;
+            using (SqlConnection connection = new SqlConnection(ConStr))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand(Query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@floor", floor);
+
+
+                    object result = cmd.ExecuteScalar();
+
+                    numberSmallSpots = Convert.ToInt32(result);
+                }
+
+            }
+            return numberSmallSpots;
+        }
 
         //public int GetParkedLargeCount()
         //{

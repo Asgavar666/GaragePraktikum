@@ -58,6 +58,7 @@ namespace Garage
                     int numberPlacesLarge = int.Parse(TbPlacesLargeNr.Text);
                     int numberPlacesSmall = int.Parse(TbPlacesSmallNr.Text);
                     DB.InsertData(Floor, numberPlacesLarge, numberPlacesSmall);
+                    DB.makeSpots();
 
                 }
                 catch (Exception Ex)
@@ -71,9 +72,20 @@ namespace Garage
 
         private void BtnEdit_Click(object sender, EventArgs e)
         {
+            string floor = TbFloorNr.Text.ToString();
+            string cars = TbPlacesLargeNr.Text.ToString();
+            string motorbikes = TbPlacesSmallNr.Text.ToString();
+
+            DB.UpdateData(floor,cars,motorbikes);
+
+
+
+
+            ShowFloor();
+            AdjustDataGridViewHeight(FloorList);
 
         }
-
+           
         private void BtnDelete_Click(object sender, EventArgs e)
         {
             if (TbFloorNr.Text.IsNullOrEmpty())
@@ -85,6 +97,7 @@ namespace Garage
                 try
                 {
                     string Floor = TbFloorNr.Text.ToString();
+                    DB.removeSpots(Floor);
                     DB.DeleteFloor(Floor);
                     ShowFloor();
                 }
@@ -97,7 +110,7 @@ namespace Garage
             AdjustDataGridViewHeight(FloorList);
         }
         //make DataBase table and FloorList to be the same height
-        void AdjustDataGridViewHeight(DataGridView dgv)
+        public void AdjustDataGridViewHeight(DataGridView dgv)
         {
             DataGridViewElementStates states = DataGridViewElementStates.None;
             dgv.ScrollBars = ScrollBars.None;

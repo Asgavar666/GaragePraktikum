@@ -41,7 +41,45 @@ namespace Garage
         //    Sda.Fill(dt);
         //    return dt;
         //}
-        
+        public void makeCarSpots(string floor, int quantity) 
+        {
+            string Query = "INSERT INTO floor_spots (carspot) VALUES (1);";
+
+            using (SqlConnection connection = new SqlConnection(ConStr))
+            {
+                connection.Open();
+
+                using (SqlCommand cmd = new SqlCommand(Query, connection))
+                {
+                    for(int i = 0; i < quantity; i++)
+                    {
+                        cmd.ExecuteNonQuery();
+                         
+                    }
+                    
+                    
+                }
+            }
+        }
+
+
+
+        public void removeSpots(string floor) 
+        {
+            string Query = "delete from floor_spots where floorID = (select f.floor_ID from floors f where f.floor_Name = @floor );";
+
+            using (SqlConnection connection = new SqlConnection(ConStr))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand(Query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@Floor", floor);
+                   
+
+                    cmd.ExecuteNonQuery(); 
+                }
+            }
+        }
 
         public void InsertData(string floor, int numberPlacesLarge, int numberPlacesSmall)
         {
@@ -56,10 +94,68 @@ namespace Garage
                     cmd.Parameters.AddWithValue("@NumberPlacesLarge", numberPlacesLarge);
                     cmd.Parameters.AddWithValue("@NumberPlacesSmall", numberPlacesSmall);
 
-                    cmd.ExecuteNonQuery(); // Executes the INSERT statement
+                    cmd.ExecuteNonQuery(); 
                 }
             }
         }
+
+        public void UpdateData(string floor, string numberPlacesLarge, string numberPlacesSmall)
+        {
+            
+            using (SqlConnection connection = new SqlConnection(ConStr))
+            {
+                connection.Open();
+                if(!string.IsNullOrEmpty(floor) && !string.IsNullOrEmpty(numberPlacesLarge) && !string.IsNullOrEmpty(numberPlacesSmall))
+                    {
+                    int large = Convert.ToInt32(numberPlacesLarge);
+                    int small = Convert.ToInt32(numberPlacesSmall);
+                        string Query = "update floors set car_Spots = @large, motorbike_Spots = @small where floor_Name = @floor;";
+                        using (SqlCommand cmd = new SqlCommand(Query, connection))
+                        {
+                    
+                            cmd.Parameters.AddWithValue("@large", large);
+                            cmd.Parameters.AddWithValue("@small", small);
+                            cmd.Parameters.AddWithValue("@floor", floor);
+                            cmd.ExecuteNonQuery();
+                        }    
+
+                    }
+                else if (!string.IsNullOrEmpty(floor) && !string.IsNullOrEmpty(numberPlacesLarge) && string.IsNullOrEmpty(numberPlacesSmall))
+                {
+                    string Query = "update floors set car_Spots = @large where floor_Name = @floor;";
+                    using (SqlCommand cmd = new SqlCommand(Query, connection))
+                    {
+                        int large = Convert.ToInt32(numberPlacesLarge);
+
+                        cmd.Parameters.AddWithValue("@large", large);
+                        cmd.Parameters.AddWithValue("@floor", floor);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                else if(!string.IsNullOrEmpty(floor) && string.IsNullOrEmpty(numberPlacesLarge) && !string.IsNullOrEmpty(numberPlacesSmall))
+                {
+                    string Query = "update floors set motorbike_Spots = @small where floor_Name = @floor;";
+                    using (SqlCommand cmd = new SqlCommand(Query, connection))
+                    {
+                        int small = Convert.ToInt32(numberPlacesSmall);
+
+                        cmd.Parameters.AddWithValue("@small", small);
+                        cmd.Parameters.AddWithValue("@floor", floor);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Etage nicht geändert, fehlende Daten");
+                }
+
+                
+            }
+        }
+
+
+
+
 
         public void LoadDataIntoDataGridView(DataGridView dataGridView)
         {
@@ -86,16 +182,17 @@ namespace Garage
                 }
             }
         }
+
         public void DeleteFloor(string floor) 
         {
-            string query = "DELETE FROM floors WHERE floor = @etage;";
+            string query = "DELETE FROM floors WHERE floor = @floor;";
 
             using (SqlConnection connection = new SqlConnection(ConStr))
             {
                 connection.Open();
                 using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    cmd.Parameters.AddWithValue("@etage", floor);
+                    cmd.Parameters.AddWithValue("@floor", floor);
                     
 
                     cmd.ExecuteNonQuery(); 

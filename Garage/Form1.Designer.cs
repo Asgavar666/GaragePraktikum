@@ -52,6 +52,10 @@
             FloorList = new DataGridView();
             PanelEtagenManager = new Panel();
             PanelEntry = new Panel();
+            LbPlatzFrei = new Label();
+            label19 = new Label();
+            LbEtageFrei = new Label();
+            label16 = new Label();
             label3 = new Label();
             label2 = new Label();
             BtnParken = new Button();
@@ -61,10 +65,6 @@
             RbAuto = new RadioButton();
             label14 = new Label();
             label13 = new Label();
-            label16 = new Label();
-            LbEtageFrei = new Label();
-            LbPlatzFrei = new Label();
-            label19 = new Label();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panel2.SuspendLayout();
@@ -92,7 +92,7 @@
             // 
             // pictureBox1
             // 
-            pictureBox1.Image = Garage.Properties.Resources.fast_sport_car_silhouette_Graphics_6979291_1_580x387;
+            pictureBox1.Image = Properties.Resources.fast_sport_car_silhouette_Graphics_6979291_1_580x387;
             pictureBox1.Location = new Point(3, 31);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(275, 148);
@@ -318,10 +318,46 @@
             PanelEntry.Controls.Add(RbAuto);
             PanelEntry.Controls.Add(label14);
             PanelEntry.Controls.Add(label13);
-            PanelEntry.Location = new Point(287, 85);
+            PanelEntry.Location = new Point(290, 85);
             PanelEntry.Name = "PanelEntry";
             PanelEntry.Size = new Size(1287, 808);
             PanelEntry.TabIndex = 14;
+            // 
+            // LbPlatzFrei
+            // 
+            LbPlatzFrei.AutoSize = true;
+            LbPlatzFrei.Location = new Point(731, 328);
+            LbPlatzFrei.Name = "LbPlatzFrei";
+            LbPlatzFrei.Size = new Size(17, 18);
+            LbPlatzFrei.TabIndex = 12;
+            LbPlatzFrei.Text = "?";
+            // 
+            // label19
+            // 
+            label19.AutoSize = true;
+            label19.Location = new Point(563, 328);
+            label19.Name = "label19";
+            label19.Size = new Size(159, 18);
+            label19.TabIndex = 11;
+            label19.Text = "Erster freier platz:";
+            // 
+            // LbEtageFrei
+            // 
+            LbEtageFrei.AutoSize = true;
+            LbEtageFrei.Location = new Point(731, 285);
+            LbEtageFrei.Name = "LbEtageFrei";
+            LbEtageFrei.Size = new Size(17, 18);
+            LbEtageFrei.TabIndex = 10;
+            LbEtageFrei.Text = "?";
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(563, 285);
+            label16.Name = "label16";
+            label16.Size = new Size(153, 18);
+            label16.TabIndex = 9;
+            label16.Text = "Erste freie Etage:";
             // 
             // label3
             // 
@@ -406,42 +442,6 @@
             label13.Size = new Size(72, 18);
             label13.TabIndex = 0;
             label13.Text = "Einfahrt";
-            // 
-            // label16
-            // 
-            label16.AutoSize = true;
-            label16.Location = new Point(563, 285);
-            label16.Name = "label16";
-            label16.Size = new Size(153, 18);
-            label16.TabIndex = 9;
-            label16.Text = "Erste freie Etage:";
-            // 
-            // LbEtageFrei
-            // 
-            LbEtageFrei.AutoSize = true;
-            LbEtageFrei.Location = new Point(731, 285);
-            LbEtageFrei.Name = "LbEtageFrei";
-            LbEtageFrei.Size = new Size(17, 18);
-            LbEtageFrei.TabIndex = 10;
-            LbEtageFrei.Text = "?";
-            // 
-            // LbPlatzFrei
-            // 
-            LbPlatzFrei.AutoSize = true;
-            LbPlatzFrei.Location = new Point(731, 328);
-            LbPlatzFrei.Name = "LbPlatzFrei";
-            LbPlatzFrei.Size = new Size(17, 18);
-            LbPlatzFrei.TabIndex = 12;
-            LbPlatzFrei.Text = "?";
-            // 
-            // label19
-            // 
-            label19.AutoSize = true;
-            label19.Location = new Point(563, 328);
-            label19.Name = "label19";
-            label19.Size = new Size(159, 18);
-            label19.TabIndex = 11;
-            label19.Text = "Erster freier platz:";
             // 
             // Form1
             // 

@@ -20,40 +20,7 @@
 --isCar bit default 0 not null
 --);
 
---DECLARE @maxFloorID INT
---SELECT @maxFloorID = MAX(floor_ID) FROM floors
 
---DECLARE @currentFloorID INT
---SET @currentFloorID = 1
-
---WHILE @currentFloorID <= @maxFloorID
---BEGIN
---    DECLARE @carSpots INT
---    DECLARE @motorbikeSpots INT
-
---    SELECT @carSpots = car_Spots, @motorbikeSpots = motorbike_Spots FROM floors WHERE floor_ID = @currentFloorID
-
---    DECLARE @counter INT
---    SET @counter = 1
-
---    WHILE @counter <= @carSpots
---    BEGIN
---        INSERT INTO floor_spots (floorID, carspot, motorspot, taken)
---        VALUES (@currentFloorID, 1, 0, 0)
---        SET @counter = @counter + 1
---    END
-
---    SET @counter = 1
-
---    WHILE @counter <= @motorbikeSpots
---    BEGIN
---        INSERT INTO floor_spots (floorID, carspot, motorspot, taken)
---        VALUES (@currentFloorID, 0, 1, 0)
---        SET @counter = @counter + 1
---    END
-
---    SET @currentFloorID = @currentFloorID + 1
---END
 
 
 
@@ -76,3 +43,45 @@
 --SELECT TOP 1 f.floor_Name FROM floors f JOIN floor_spots fs ON f.floor_ID = fs.floorID WHERE fs.taken = 0 ORDER BY f.floor_ID;
 --select top 1 s.spot_ID from floor_spots s join  floors f on s.floorID = f.floor_ID where s.taken = 0 and s.carspot = 1  order by s.spot_ID;
 -- select top 1 s.spot_ID from floor_spots s join floors f on s.floorID = (select f.floor_ID where f.floor_Name = 'A') where s.taken = 0 and s.carspot = 1  order by s.spot_ID;
+
+--delete from floor_spots where floorID = (select f.floor_ID from floors f where f.floor_Name = 'A' );
+
+--select car_Spots from floors where floor_Name = 'A';
+
+
+--INSERT INTO floor_spots ( floorID, carspot) 
+--        SELECT floor_ID, 1 
+--        FROM floors 
+--        WHERE floor_name = 'A';
+
+--        select * from floor_spots;
+
+--INSERT INTO floor_spots (floorID, carspot) 
+--        SELECT f.floor_ID, 1 
+--        FROM floors f
+--        WHERE f.floor_name = 'A'
+--        AND NOT EXISTS (
+--            SELECT 1
+--            FROM floor_spots fs
+--            WHERE fs.floorID = f.floor_ID);
+
+--            select * from floor_spots;
+
+--update fs
+--set fs.carspot = 1,
+--fs.floorID = (
+--select f.floor_ID from floors as f 
+--where f.floor_Name = 'A')from floor_spots as fs
+--where fs.spot_ID = (select min(spot_ID)
+--from floor_spots
+--where carspot = 0 and taken = 0);
+--update floor_spots 
+--set carspot = 1 
+--(select f.floor_ID from floors f where f.floor_Name = 'A');
+--update floor_spots set carspot = 1, floorID = 1 where spot_ID = 1;
+--UPDATE floor_spots SET carspot = CAST(1 AS BIT), floorID = 1, taken = cast(1 as bit);
+
+--select f.floor_ID from floors f where f.floor_Name = 'A';
+--select * from floor_spots;
+--select * from floors;
+
