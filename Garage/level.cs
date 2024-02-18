@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -14,18 +14,21 @@ namespace Garage
         private string ConStr;
         public level() 
         {
-            ConStr = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\kbade\Documents\GarageBD.mdf;Integrated Security=True;Connect Timeout=30";
+            ConStr = "Server=localhost;Database=Garage;User=root;Password='';";
         }
+
+
 
         public string GetFloorWithSpots() 
         {
-            string Query = "SELECT TOP 1 f.floor_Name FROM floors f JOIN floor_spots fs ON f.floor_ID = fs.floorID WHERE fs.taken = 0 ORDER BY f.floor_ID;";
+            
+            string Query = "SELECT f.floor_Name \r\nFROM floors f \r\nJOIN {tableName} fs ON f.floor_ID = fs.floorID \r\nWHERE fs.taken = 0 \r\nORDER BY f.floor_ID\r\nLIMIT 1;\r\n";
 
             string floorName = null;
-            using (SqlConnection connection = new SqlConnection(ConStr))
+            using (MySqlConnection connection = new MySqlConnection(ConStr))
             {
                 connection.Open();
-                using(SqlCommand cmd = new SqlCommand(Query, connection))
+                using(MySqlCommand cmd = new MySqlCommand(Query, connection))
                 {
                    object result = cmd.ExecuteScalar();
                     if (result != null) // Check if result is not null
@@ -36,7 +39,7 @@ namespace Garage
                     {
                         // If no floor with free spots is found, get the first floor name directly
                         string getFirstFloorQuery = "SELECT TOP 1 floor_Name FROM floors ORDER BY floor_ID;";
-                        using (SqlCommand cmdFirstFloor = new SqlCommand(getFirstFloorQuery, connection))
+                        using (MySqlCommand cmdFirstFloor = new MySqlCommand(getFirstFloorQuery, connection))
                         {
                             object firstFloorResult = cmdFirstFloor.ExecuteScalar();
                             if (firstFloorResult != null)
@@ -53,12 +56,12 @@ namespace Garage
         public int GetFirstCarSpot(string floor) 
         {
             
-            string Query = "select top 1 s.spot_ID from floor_spots s join floors f on s.floorID = (select f.floor_ID where f.floor_Name = @floor) where s.taken = 0 and s.carspot = 1  order by s.spot_ID; ";
+            string Query = "SELECT s.spotID \r\nFROM a_floor s \r\nJOIN floors f ON s.floorID = (SELECT f.floor_ID FROM floors f WHERE f.floor_Name = 'A') \r\nWHERE s.IsOccupied = 0 AND s.VehicleType = 'car'  \r\nORDER BY s.spotID \r\nLIMIT 1;\r\n ";
             int parkingSpot = 0;
-            using (SqlConnection connection = new SqlConnection(ConStr))
+            using (MySqlConnection connection = new MySqlConnection(ConStr))
             {
                 connection.Open();
-                using (SqlCommand cmd = new SqlCommand(Query, connection))
+                using (MySqlCommand cmd = new MySqlCommand(Query, connection))
                 {
                     cmd.Parameters.AddWithValue("@floor", floor);
                     object result = cmd.ExecuteScalar();
@@ -75,12 +78,13 @@ namespace Garage
 
         public int GetLargeSpotsCount(string floor)
         {
+
             string Query = "select car_Spots from floors where floor_Name = @floor;";
             int numberLargeSpots = 0;
-            using (SqlConnection connection = new SqlConnection(ConStr))
+            using (MySqlConnection connection = new MySqlConnection(ConStr))
             {
                 connection.Open();
-                using (SqlCommand cmd = new SqlCommand(Query, connection))
+                using (MySqlCommand cmd = new MySqlCommand(Query, connection))
                 {
                     cmd.Parameters.AddWithValue("@floor", floor);
 
@@ -98,10 +102,10 @@ namespace Garage
         {
             string Query = "select motorbike_Spots from floors where floor_Name = @floor;";
             int numberSmallSpots = 0;
-            using (SqlConnection connection = new SqlConnection(ConStr))
+            using (MySqlConnection connection = new MySqlConnection(ConStr))
             {
                 connection.Open();
-                using (SqlCommand cmd = new SqlCommand(Query, connection))
+                using (MySqlCommand cmd = new MySqlCommand(Query, connection))
                 {
                     cmd.Parameters.AddWithValue("@floor", floor);
 
@@ -160,10 +164,10 @@ namespace Garage
             
                 string Query = "INSERT INTO Tb_fahrzeug(Kennz, Car, Motorrad) VALUES (@Kennz, @Car, @Motorrad);";
 
-                using (SqlConnection connection = new SqlConnection(ConStr))
+                using (MySqlConnection connection = new MySqlConnection(ConStr))
                 {
                     connection.Open();
-                    using (SqlCommand cmd = new SqlCommand(Query, connection))
+                    using (MySqlCommand cmd = new MySqlCommand(Query, connection))
                     {
                         cmd.Parameters.AddWithValue("@Kennz", licencePlate);
                         cmd.Parameters.AddWithValue("@Car", Car);

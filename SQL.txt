@@ -1,0 +1,9 @@
+MySQL Datenbank
+
+CREATE TABLE `floors` (
+  `floor_ID` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `floor_Name` varchar(48) DEFAULT NULL,
+  `car_Spots` int(11) DEFAULT NULL,
+  `motorbike_Spots` int(11) DEFAULT NULL
+),
+

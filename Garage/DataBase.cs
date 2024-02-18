@@ -1,30 +1,32 @@
-﻿using Microsoft.Data.SqlClient;
+﻿
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MySql.Data.MySqlClient;
 
 namespace Garage
 {
      class DataBase
     {
-        private SqlConnection Con;
-        private SqlCommand Cmd;
+        
+        private MySqlCommand Cmd;
         private DataTable dt;
-        private SqlDataAdapter Sda;
+        private MySqlDataAdapter Sda;
         private string ConStr;
 
         public DataBase()
         {
-            ConStr = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\kbade\Documents\GarageBD.mdf;Integrated Security=True;Connect Timeout=30";
-            Con = new SqlConnection(ConStr);
-            Cmd = new SqlCommand();
-            Cmd.Connection = Con;
+            ConStr = "Server=localhost;Database=Garage;User=root;Password='';";
+
+            Cmd = new MySqlCommand();
+            
 
         }
         //public DataTable GetData( string floor, int numberPlacesLarge, int numberPlacesSmall)
@@ -43,13 +45,13 @@ namespace Garage
         //}
         public void makeCarSpots(string floor, int quantity) 
         {
-            string Query = "INSERT INTO floor_spots (carspot) VALUES (1);";
+            string Query = "INSERT INTO floor_spots (carspot) VALUES (True);";
 
-            using (SqlConnection connection = new SqlConnection(ConStr))
+            using (MySqlConnection connection = new MySqlConnection(ConStr))
             {
                 connection.Open();
 
-                using (SqlCommand cmd = new SqlCommand(Query, connection))
+                using (MySqlCommand cmd = new MySqlCommand(Query, connection))
                 {
                     for(int i = 0; i < quantity; i++)
                     {
@@ -68,10 +70,10 @@ namespace Garage
         {
             string Query = "delete from floor_spots where floorID = (select f.floor_ID from floors f where f.floor_Name = @floor );";
 
-            using (SqlConnection connection = new SqlConnection(ConStr))
+            using (MySqlConnection connection = new MySqlConnection(ConStr))
             {
                 connection.Open();
-                using (SqlCommand cmd = new SqlCommand(Query, connection))
+                using (MySqlCommand cmd = new MySqlCommand(Query, connection))
                 {
                     cmd.Parameters.AddWithValue("@Floor", floor);
                    
@@ -85,10 +87,10 @@ namespace Garage
         {
             string Query = "INSERT INTO floors(floor_Name, car_Spots, motorbike_Spots) VALUES (@Floor, @NumberPlacesLarge, @NumberPlacesSmall);";
 
-            using (SqlConnection connection = new SqlConnection(ConStr))
+            using (MySqlConnection connection = new MySqlConnection(ConStr))
             {
                 connection.Open();
-                using (SqlCommand cmd = new SqlCommand(Query, connection))
+                using (MySqlCommand cmd = new MySqlCommand(Query, connection))
                 {
                     cmd.Parameters.AddWithValue("@Floor", floor);
                     cmd.Parameters.AddWithValue("@NumberPlacesLarge", numberPlacesLarge);
@@ -102,7 +104,7 @@ namespace Garage
         public void UpdateData(string floor, string numberPlacesLarge, string numberPlacesSmall)
         {
             
-            using (SqlConnection connection = new SqlConnection(ConStr))
+            using (MySqlConnection connection = new MySqlConnection(ConStr))
             {
                 connection.Open();
                 if(!string.IsNullOrEmpty(floor) && !string.IsNullOrEmpty(numberPlacesLarge) && !string.IsNullOrEmpty(numberPlacesSmall))
@@ -110,7 +112,7 @@ namespace Garage
                     int large = Convert.ToInt32(numberPlacesLarge);
                     int small = Convert.ToInt32(numberPlacesSmall);
                         string Query = "update floors set car_Spots = @large, motorbike_Spots = @small where floor_Name = @floor;";
-                        using (SqlCommand cmd = new SqlCommand(Query, connection))
+                        using (MySqlCommand cmd = new MySqlCommand(Query, connection))
                         {
                     
                             cmd.Parameters.AddWithValue("@large", large);
@@ -123,7 +125,7 @@ namespace Garage
                 else if (!string.IsNullOrEmpty(floor) && !string.IsNullOrEmpty(numberPlacesLarge) && string.IsNullOrEmpty(numberPlacesSmall))
                 {
                     string Query = "update floors set car_Spots = @large where floor_Name = @floor;";
-                    using (SqlCommand cmd = new SqlCommand(Query, connection))
+                    using (MySqlCommand cmd = new MySqlCommand(Query, connection))
                     {
                         int large = Convert.ToInt32(numberPlacesLarge);
 
@@ -135,7 +137,7 @@ namespace Garage
                 else if(!string.IsNullOrEmpty(floor) && string.IsNullOrEmpty(numberPlacesLarge) && !string.IsNullOrEmpty(numberPlacesSmall))
                 {
                     string Query = "update floors set motorbike_Spots = @small where floor_Name = @floor;";
-                    using (SqlCommand cmd = new SqlCommand(Query, connection))
+                    using (MySqlCommand cmd = new MySqlCommand(Query, connection))
                     {
                         int small = Convert.ToInt32(numberPlacesSmall);
 
@@ -159,38 +161,33 @@ namespace Garage
 
         public void LoadDataIntoDataGridView(DataGridView dataGridView)
         {
-            
-            string query = "SELECT floor_Name, car_Spots, motorbike_Spots FROM floors";
+            string connStr =  "Server=localhost;Database=Garage;User=root;Password='';";
+            string query = "SELECT * FROM floors;";
 
-            using (SqlConnection connection = new SqlConnection(ConStr))
+            using (MySqlConnection connection = new MySqlConnection(connStr))
             {
                 connection.Open();
-                using (SqlCommand command = new SqlCommand(query, Con))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
-                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                    using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         DataTable table = new DataTable();
-                        adapter.Fill(table);
-
-                        
-                        BindingSource bindingSource = new BindingSource();
-                        bindingSource.DataSource = table;
-
-                        
-                        dataGridView.DataSource = bindingSource;
+                        table.Load(reader);
+                        dataGridView.DataSource = table;
                     }
                 }
             }
         }
 
+
         public void DeleteFloor(string floor) 
         {
-            string query = "DELETE FROM floors WHERE floor = @floor;";
+            string query = "DELETE FROM floors WHERE floor_Name = @floor;";
 
-            using (SqlConnection connection = new SqlConnection(ConStr))
+            using (MySqlConnection connection = new MySqlConnection(ConStr))
             {
                 connection.Open();
-                using (SqlCommand cmd = new SqlCommand(query, connection))
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
                 {
                     cmd.Parameters.AddWithValue("@floor", floor);
                     

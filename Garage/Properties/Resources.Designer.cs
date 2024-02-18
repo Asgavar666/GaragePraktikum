@@ -63,16 +63,6 @@ namespace Garage.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap _1000_F_573635597_uxl7NMPmaBSMhezV72OMtoZ85v6gzOOj {
-            get {
-                object obj = ResourceManager.GetObject("1000_F_573635597_uxl7NMPmaBSMhezV72OMtoZ85v6gzOOj", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap fast_sport_car_silhouette_Graphics_6979291_1_580x387 {
             get {
                 object obj = ResourceManager.GetObject("fast-sport-car-silhouette-Graphics-6979291-1-580x387", resourceCulture);

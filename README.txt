@@ -1,0 +1,1 @@
+Für die App müssen Sie eine MySAL Datenbank erstellen(lese SQL.txt) und überall string 'ConStr' mit eigenem Connectionstring ersetzen
